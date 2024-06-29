@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Top-up Balance</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
+</head>
+<body class="bg-gray-100">
+
+  <!-- Header -->
+  <header class="bg-white shadow-lg">
+    <div class="max-w-6xl mx-auto px-4">
+      <nav class="flex justify-between items-center py-4">
+        <a href="dashboard.html" class="text-gray-700 font-bold text-lg">Dashboard</a>
+        <ul class="flex space-x-4">
+          <li><a href="edit_profile.html" class="text-gray-700 hover:text-gray-900">Edit Profile</a></li>
+          <li><a href="topup_balance.html" class="text-gray-700 hover:text-gray-900">Top-up Balance</a></li>
+          <!-- Add more menu items as needed -->
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-6xl mx-auto px-4 py-8">
+
+    <section class="bg-white shadow-md rounded-md p-6">
+      <h1 class="text-2xl font-bold mb-4">Top-up Balance</h1>
+      <form action="/process_topup" method="POST" class="space-y-4">
+        <div>
+          <label for="amount" class="block text-sm font-medium text-gray-700">Amount:</label>
+          <input type="number" id="amount" name="amount" required
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+        </div>
+        
+        <!-- Payment Method -->
+        <fieldset class="space-y-2">
+          <legend class="block text-sm font-medium text-gray-700">Select Payment Method:</legend>
+          <div class="flex items-center">
+            <input type="radio" id="method_bank" name="payment_method" value="bank_transfer" checked
+              class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300">
+            <label for="method_bank" class="ml-2 block text-sm text-gray-900">Bank Transfer</label>
+          </div>
+          <div class="flex items-center">
+            <input type="radio" id="method_ewallet" name="payment_method" value="ewallet"
+              class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300">
+            <label for="method_ewallet" class="ml-2 block text-sm text-gray-900">E-wallet</label>
+          </div>
+        </fieldset>
+        
+        <button type="submit"
+          class="inline-block bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300">Top-up
+          Now</button>
+      </form>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white text-center py-4">
+    <p>&copy; 2024 Your Company. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>
