@@ -1,1 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChatBot by Fandirr Store🇮🇩</title>
+  <link rel="icon" type="image/jpg" href="https://fandirr.cloud/img/logo.png">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: 20px;
+    }
+    .chat-container {
+      width: 100%;
+      max-width: 900px;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      padding: 20px;
+      backdrop-filter: blur(8px);
+      animation: fadeIn 0.5s ease;
+    }
+    .chat-header {
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid #eef2f7;
+      padding-bottom: 15px;
+      margin-bottom: 15px;
+    }
+    .bot-avatar {
+      width: 45px;
+      height: 45px;
+      background: #764ba2;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 15px;
+      flex-shrink: 0;
+    }
+    .bot-avatar svg {
+      width: 25px;
+      height: 25px;
+      fill: #fff;
+    }
+    .chat-header h1 {
+      font-size: 1.5rem;
+      color: #2d3748;
+    }
+    .chat-messages {
+      height: 400px;
+      overflow-y: auto;
+      padding: 15px;
+      background: #f8fafc;
+      border-radius: 15px;
+      margin-bottom: 15px;
+      scroll-behavior: smooth;
+    }
+    .message {
+      margin-bottom: 15px;
+      display: flex;
+      align-items: flex-start;
+      opacity: 0;
+      animation: messageSlide 0.3s ease-out forwards;
+    }
+    .user-message {
+      justify-content: flex-end;
+    }
+    .bot-message {
+      justify-content: flex-start;
+    }
+    .message-content {
+      padding: 12px 18px;
+      border-radius: 18px;
+      max-width: 75%;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    .user-message .message-content {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #fff;
+    }
+    .bot-message .message-content {
+      background: #fff;
+      color: #2d3748;
+      border: 1px solid #e2e8f0;
+    }
+    .input-container {
+      display: flex;
+      gap: 10px;
+      padding: 10px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    #message-input {
+      flex: 1;
+      padding: 10px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      transition: border-color 0.3s;
+    }
+    #message-input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+    #send-button {
+      padding: 12px 20px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      font-weight: bold;
+    }
+    #send-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(102, 126, 234, 0.3);
+    }
+    .typing-indicator {
+      display: none;
+      padding: 10px;
+      color: #666;
+      font-style: italic;
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes messageSlide {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <div class="chat-header">
+      <div class="bot-avatar">
+        <svg viewBox="0 0 24 24">
+          <path d="M12,2A10,10 0 1,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 1,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4Z"/>
+        </svg>
+      </div>
+      <h1>FANDIRRBOTZ AI🇮🇩</h1>
+    </div>
+    <div class="chat-messages" id="chat-messages"></div>
+    <div class="typing-indicator" id="typing-indicator">AI sedang mikir, mohon bersabar...</div>
+    <div class="input-container">
+      <input type="text" id="message-input" placeholder="Type your message..." autocomplete="off">
+      <button id="send-button">Send</button>
+    </div>
+  </div>
 
+  <script>
+    const messageInput = document.getElementById('message-input');
+    const sendButton = document.getElementById('send-button');
+    const chatMessages = document.getElementById('chat-messages');
+    const typingIndicator = document.getElementById('typing-indicator');
+
+    async function sendMessage() {
+      const message = messageInput.value.trim();
+      if (!message) return;
+      addMessage(message, 'user');
+      messageInput.value = '';
+      typingIndicator.style.display = 'block';
+      try {
+        const response = await fetch(`https://darkness.ashlynn.workers.dev/chat/?prompt=${encodeURIComponent(message)}&model=gpt-4o-mini`);
+        const data = await response.json();
+        typingIndicator.style.display = 'none';
+        if (data.successful === 'success' && data.response) {
+          addMessage(data.response, 'bot');
+        } else {
+          addMessage('An error occurred. Please try again.', 'bot');
+        }
+      } catch (error) {
+        console.error(error);
+        typingIndicator.style.display = 'none';
+        addMessage('An error occurred. Please try again.', 'bot');
+      }
+    }
+
+    function addMessage(text, sender) {
+      const messageDiv = document.createElement('div');
+      messageDiv.classList.add('message', `${sender}-message`);
+      const messageContent = document.createElement('div');
+      messageContent.classList.add('message-content');
+      messageContent.textContent = text;
+      messageDiv.appendChild(messageContent);
+      chatMessages.appendChild(messageDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    sendButton.addEventListener('click', sendMessage);
+    messageInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') sendMessage();
+    });
+
+    addMessage('Hello! I am your GPT-4 assistant. How can I help you today?', 'bot');
+  </script>
+</body>
+</html>
