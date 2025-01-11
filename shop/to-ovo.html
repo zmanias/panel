@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kembali</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .product-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 10px;
+        }
+
+        .product-item {
+            display: flex;
+            align-items: center;
+            border: 2px solid #03b3ff;
+            border-radius: 15px;
+            overflow: hidden;
+            padding: 10px;
+            width: 95%;
+            max-width: 800px;
+            margin: 0 auto;
+            text-decoration: none;
+            color: inherit;
+            outline: none;
+            user-select: none;
+            transition: background-color 0.3s;
+        }
+
+        .product-item:active {
+            background-color: #f0f0f0;
+        }
+
+        .product-item img {
+            border-radius: 0px;
+            width: 30px;
+            height: auto;
+            margin-right: 10px;
+        }
+
+        .product-item h3 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .search-bar {
+            width: 95%;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 10px;
+            border: 2px solid #ff0000;
+            border-radius: 10px;
+            font-size: 16px;
+            outline: none;
+        }
+        a {
+            text-decoration: none;
+        }
+
+        a:focus {
+            outline: none;
+        }
+
+        .search-bar:focus {
+            border-color: #ff0000;
+        }
+    </style>
+</head>
+<body>
+    <input type="text" class="search-bar" placeholder="Cari Produk Kamu" onkeyup="filterProducts()">
+
+    <div class="product-list" id="productList">
+        <a href="https://fandirrstore.olshopku.com/produk/topup-ovo-1000-2868366" class="product-item">
+            <img src="https://fandirr.cloud/img/ovo.jpg" alt="1000">
+            <h3>OVO 1.000</h3>
+        </a>
+        <a href="https://fandirrstore.olshopku.com/produk/topup-ovo-2000-2868367" class="product-item">
+            <img src="https://fandirr.cloud/img/ovo.jpg" alt="2000">
+            <h3>OVO 2.000</h3>
+        </a>
+        <a href="https://fandirrstore.olshopku.com/produk/topup-ovo-3000-2868368" class="product-item">
+            <img src="https://fandirr.cloud/img/ovo.jpg" alt="3000">
+            <h3>OVO 3.000</h3>
+        </a>
+        <a href="https://fandirrstore.olshopku.com/produk/topup-ovo-4000-2868369" class="product-item">
+            <img src="https://fandirr.cloud/img/ovo.jpg" alt="4000">
+            <h3>OVO 4.000</h3>
+        </a>
+        <a href="https://fandirrstore.olshopku.com/produk/topup-ovo-5000-2868370" class="product-item">
+            <img src="https://fandirr.cloud/img/ovo.jpg" alt="5000">
+            <h3>OVO 5.000</h3>
+        </a>
+        <a href="https://fandirrstore.olshopku.com/produk/topup-ovo-10-000-2868371" class="product-item">
+            <img src="https://fandirr.cloud/img/ovo.jpg" alt="10000">
+            <h3>OVO 10.000</h3>
+        </a>
+        <a href="https://fandirrstore.olshopku.com/produk/topup-ovo-15-000-2868372" class="product-item">
+            <img src="https://fandirr.cloud/img/ovo.jpg" alt="15000">
+            <h3>OVO 15.000</h3>
+        </a>
+        <a href="https://fandirrstore.olshopku.com/produk/topup-ovo-20-000-2868374" class="product-item">
+            <img src="https://fandirr.cloud/img/ovo.jpg" alt="20000">
+            <h3>OVO 20.000</h3>
+        </a>
+        <a href="https://fandirrstore.olshopku.com/produk/topup-ovo-25-000-2868376" class="product-item">
+            <img src="https://fandirr.cloud/img/ovo.jpg" alt="25000">
+            <h3>OVO 25.000</h3>
+        </a>
+        <a href="https://fandirrstore.olshopku.com/produk/topup-ovo-50-000-2868378" class="product-item">
+            <img src="https://fandirr.cloud/img/ovo.jpg" alt="50000">
+            <h3>OVO 50.000</h3>
+        </a>
+        <a href="https://fandirrstore.olshopku.com/produk/topup-ovo-100-000-2868381" class="product-item">
+            <img src="https://fandirr.cloud/img/ovo.jpg" alt="100000">
+            <h3>OVO 100.000</h3>
+        </a>
+        <!-- Tambahkan produk lainnya di sini -->
+    </div>
+
+    <script>
+        function filterProducts() {
+            const searchInput = document.querySelector('.search-bar').value.toLowerCase();
+            const productItems = document.querySelectorAll('.product-item');
+            
+            productItems.forEach(item => {
+                const productName = item.querySelector('h3').textContent.toLowerCase();
+                if (productName.includes(searchInput)) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
