@@ -1,0 +1,190 @@
+/* Pengaturan Dasar & Body */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: #f4f7f9;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+/* Kontainer Utama */
+.container {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 450px;
+}
+
+.container.large {
+    max-width: 900px;
+}
+
+/* Header & Judul */
+h1 {
+    text-align: center;
+    color: #2c3e50;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+}
+
+h2 {
+    color: #34495e;
+    border-bottom: 2px solid #ecf0f1;
+    padding-bottom: 0.5rem;
+    margin-top: 0;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.header h1 {
+    margin: 0;
+}
+
+/* Formulir & Input */
+.form-group {
+    margin-bottom: 1rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+input[type="text"],
+input[type="password"],
+select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 1rem;
+}
+
+/* Tombol (Button) */
+button {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #2980b9;
+}
+
+button:disabled {
+    background-color: #a9cce3;
+    cursor: not-allowed;
+}
+
+#logoutBtn, #refreshBtn {
+    width: auto;
+    padding: 0.5rem 1rem;
+}
+
+.delete-btn {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.delete-btn:hover {
+    background-color: #c0392b;
+}
+
+.delete-btn.small {
+    padding: 0.2rem 0.5rem;
+    font-size: 0.8rem;
+    margin-left: 10px;
+}
+
+/* Pesan & Notifikasi */
+.message {
+    text-align: center;
+    margin-top: 1rem;
+    font-weight: 600;
+    min-height: 1.2em; /* Mencegah layout bergeser saat pesan muncul */
+}
+
+/* Tabel */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+th, td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    word-break: break-all; /* Mencegah teks panjang merusak layout */
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+/* Styling Khusus Admin Dashboard */
+.section {
+    margin-bottom: 2.5rem;
+}
+
+/* Formulir Domain Admin yang baru */
+.domain-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background-color: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 5px;
+}
+
+.domain-form input {
+    width: 100%;
+}
+
+.domain-form button {
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+/* Tata letak responsif untuk form admin di layar lebih besar */
+@media (min-width: 768px) {
+    .domain-form {
+        flex-direction: row;
+        align-items: center;
+    }
+    .domain-form input {
+        flex: 1;
+    }
+    .domain-form button {
+        width: auto;
+        margin-top: 0;
+    }
+}
