@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Subdomain</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Buat Subdomain Baru</h1>
+        <form id="createSubdomainForm">
+            <div class="form-group">
+                <label for="subdomainName">Nama Subdomain</label>
+                <input type="text" id="subdomainName" required>
+            </div>
+            <div class="form-group">
+                <label for="domain">Domain</label>
+                <select id="domain" required></select>
+            </div>
+            <div class="form-group">
+                <label for="ipAddress">Alamat IP VPS</label>
+                <input type="text" id="ipAddress" value="127.0.0.1" required>
+            </div>
+            <button type="submit" id="createBtn">Buat Subdomain</button>
+        </form>
+        <div id="message" class="message"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
