@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pembaca File Arsip (ZIP)</title>
+    <!-- Menggunakan Tailwind CSS untuk styling cepat dan modern -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Menggunakan library JSZip untuk membaca file ZIP di sisi klien -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <style>
+        /* Gaya tambahan untuk tampilan yang lebih baik */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .file-list-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem; /* 12px */
+        }
+        .file-list-item svg {
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200 flex items-center justify-center min-h-screen p-4">
+
+    <div class="w-full max-w-2xl bg-gray-800 rounded-xl shadow-2xl p-8 transform transition-all hover:scale-[1.01]">
+        <!-- Header Aplikasi -->
+        <div class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-white tracking-tight">Pembaca Isi File Arsip</h1>
+            <p class="text-gray-400 mt-2">Pilih sebuah file `.zip` untuk melihat dan menyalin daftar isinya.</p>
+        </div>
+
+        <!-- Input File -->
+        <div class="mb-6">
+            <label for="zipFile" class="w-full flex justify-center items-center px-6 py-4 bg-gray-700 text-gray-300 rounded-lg border-2 border-dashed border-gray-600 cursor-pointer hover:bg-gray-600 hover:border-blue-500 transition-colors duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 mr-3 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                </svg>
+                <span class="font-semibold text-lg">Pilih atau Seret File .zip ke Sini</span>
+            </label>
+            <input type="file" id="zipFile" class="hidden" accept=".zip">
+        </div>
+
+        <!-- Tampilan Hasil -->
+        <div id="resultContainer" class="mt-8 hidden">
+             <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
+                <h2 class="text-2xl font-semibold text-white">Daftar File Arsip:</h2>
+                <!-- Tombol Salin ditambahkan di sini -->
+                <button id="copyButton" class="hidden bg-blue-600 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded-lg text-sm transition-all duration-300 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+                      <path d="M4 1.5H3a2 2 0 0 0-2 2v8.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5v-8a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1v8a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-8.5a1 1 0 0 1 1-1H4v-1z"/>
+                      <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+                    </svg>
+                    Salin Struktur
+                </button>
+             </div>
+             <div id="fileList" class="bg-gray-900/50 p-4 rounded-lg max-h-96 overflow-y-auto space-y-2">
+                <!-- Daftar file akan ditampilkan di sini oleh JavaScript -->
+             </div>
+        </div>
+    </div>
+
+    <script>
+        // Mendapatkan elemen-elemen dari DOM
+        const zipFileInput = document.getElementById('zipFile');
+        const resultContainer = document.getElementById('resultContainer');
+        const fileListContainer = document.getElementById('fileList');
+        const copyButton = document.getElementById('copyButton');
+
+        // Variabel untuk menyimpan path file saat ini
+        let currentFilePaths = [];
+        
+        // Menambahkan event listener ke input file dan tombol salin
+        zipFileInput.addEventListener('change', handleFileSelect, false);
+        copyButton.addEventListener('click', copyFileStructure, false);
+
+        // Fungsi untuk menangani pemilihan file
+        function handleFileSelect(event) {
+            // Sembunyikan tombol salin setiap kali file baru dipilih
+            copyButton.classList.add('hidden');
+            currentFilePaths = [];
+
+            const files = event.target.files;
+            if (files.length === 0) {
+                console.log('Tidak ada file yang dipilih.');
+                return;
+            }
+            
+            const file = files[0];
+            
+            resultContainer.classList.remove('hidden');
+            fileListContainer.innerHTML = `<p class="text-gray-400">Membaca file arsip...</p>`;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const content = e.target.result;
+                
+                JSZip.loadAsync(content)
+                    .then(function(zip) {
+                        displayFileTree(zip);
+                    })
+                    .catch(function(err) {
+                        console.error("Gagal membaca file ZIP:", err);
+                        fileListContainer.innerHTML = `<p class="text-red-400">Gagal memproses file. Pastikan ini adalah file .zip yang valid.</p>`;
+                    });
+            };
+            
+            reader.readAsArrayBuffer(file);
+        }
+
+        // Fungsi untuk menampilkan struktur file dan folder
+        function displayFileTree(zip) {
+            fileListContainer.innerHTML = '';
+            
+            const filePaths = [];
+            zip.forEach((relativePath, zipEntry) => {
+                filePaths.push(zipEntry.name);
+            });
+
+            if (filePaths.length === 0) {
+                fileListContainer.innerHTML = `<p class="text-gray-400">Arsip ini kosong.</p>`;
+                copyButton.classList.add('hidden'); // Pastikan tombol salin disembunyikan jika kosong
+                return;
+            }
+
+            // Simpan path file yang sudah diurutkan ke variabel global
+            currentFilePaths = filePaths.sort();
+            
+            // Tampilkan tombol salin jika ada file
+            copyButton.classList.remove('hidden');
+            
+            currentFilePaths.forEach(path => {
+                const isFolder = path.endsWith('/');
+                const li = document.createElement('div');
+                li.className = 'file-list-item text-gray-300';
+                
+                const icon = isFolder ? 
+                    `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>` : 
+                    `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0011.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>`;
+
+                li.innerHTML = `${icon}<span>${path}</span>`;
+                fileListContainer.appendChild(li);
+            });
+        }
+
+        // Fungsi baru untuk menyalin struktur file ke clipboard
+        function copyFileStructure() {
+            if (currentFilePaths.length === 0) return;
+
+            // Gabungkan semua path file menjadi satu string dengan pemisah baris baru
+            const textToCopy = currentFilePaths.join('\n');
+
+            // Buat elemen textarea sementara untuk proses penyalinan
+            const textArea = document.createElement('textarea');
+            textArea.value = textToCopy;
+            // Pastikan textarea tidak terlihat
+            textArea.style.position = 'fixed';
+            textArea.style.top = 0;
+            textArea.style.left = 0;
+            document.body.appendChild(textArea);
+
+            textArea.focus();
+            textArea.select();
+
+            try {
+                // Gunakan document.execCommand untuk kompatibilitas yang lebih luas
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    // Beri umpan balik visual kepada pengguna
+                    const originalText = copyButton.innerHTML;
+                    copyButton.innerHTML = 'Berhasil Disalin!';
+                    copyButton.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+                    copyButton.classList.add('bg-green-600');
+
+                    setTimeout(() => {
+                        copyButton.innerHTML = originalText;
+                        copyButton.classList.remove('bg-green-600');
+                        copyButton.classList.add('bg-blue-600', 'hover:bg-blue-700');
+                    }, 2000); // Kembalikan setelah 2 detik
+                }
+            } catch (err) {
+                console.error('Gagal menyalin teks: ', err);
+            }
+
+            document.body.removeChild(textArea);
+        }
+    </script>
+    <!-- Catatan: Kode ini dibuat untuk tujuan belajar dan eksperimen. -->
+</body>
+</html>
+
