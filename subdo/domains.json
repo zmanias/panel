@@ -1,17 +1,7 @@
 [
   {
     "domain": "blackhat.web.id",
-    "token": "TOKEN_CLOUDFLARE_ANDA_1",
-    "zoneId": "ZONE_ID_ANDA_1"
-  },
-  {
-    "domain": "fandirr.store",
-    "token": "TOKEN_CLOUDFLARE_ANDA_2",
-    "zoneId": "ZONE_ID_ANDA_2"
-  },
-  {
-    "domain": "keren.dev",
-    "token": "TOKEN_CLOUDFLARE_ANDA_3",
-    "zoneId": "ZONE_ID_ANDA_3"
+    "token": "Ha4d3fnrWRpkJHnPEcI2Xz983vnKWjVX3Zdwa1Ll",
+    "zoneId": "470d470c77018682610d447cffed1981"
   }
 ]
