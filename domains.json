@@ -28,5 +28,10 @@
     "domain": "fandirr.eu.org",
     "token": "Ha4d3fnrWRpkJHnPEcI2Xz983vnKWjVX3Zdwa1Ll",
     "zoneId": "3aa0ca494c6d17a561b6be12da62a3b3"
+  },
+  {
+    "domain": "trex.web.id",
+    "token": "Ha4d3fnrWRpkJHnPEcI2Xz983vnKWjVX3Zdwa1Ll",
+    "zoneId": "2d076c366b90c226a7270e7314deeafb"
   }
 ]
