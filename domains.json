@@ -23,5 +23,10 @@
     "domain": "fandirr.web",
     "token": "Ha4d3fnrWRpkJHnPEcI2Xz983vnKWjVX3Zdwa1Ll",
     "zoneId": "367c36a99b91d5cff96e3e17a1ec97ef"
+  },
+  {
+    "domain": "fandirr.eu.org",
+    "token": "Ha4d3fnrWRpkJHnPEcI2Xz983vnKWjVX3Zdwa1Ll",
+    "zoneId": "3aa0ca494c6d17a561b6be12da62a3b3"
   }
 ]
