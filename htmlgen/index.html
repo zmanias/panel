@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive HTML Builder</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+</head>
+<body>
+
+    <header>
+        <h1><i class="fas fa-layer-group"></i> HTML Builder</h1>
+        <div class="header-actions">
+            <span id="save-notification"></span>
+            <button id="btn-export-zip" title="Ekspor ke .ZIP"><i class="fas fa-file-zipper"></i><span class="desktop-only"> Ekspor</span></button>
+        </div>
+    </header>
+    
+    <main class="main-container">
+        <div class="panel is-active" id="panel-editor">
+            <div class="panel-header">Editor</div>
+            <div class="panel-content">
+                <div class="add-block-controls">
+                    <select id="select-block-type">
+                        <option value="heading">Judul</option>
+                        <option value="paragraph">Paragraf</option>
+                        <option value="image">Gambar</option>
+                        <option value="button">Tombol</option>
+                        <option value="divider">Garis</option>
+                    </select>
+                    <button id="btn-add-block" title="Tambah Elemen Baru"><i class="fas fa-plus"></i></button>
+                </div>
+                <hr>
+                <div id="editor-area">
+                    <div class="empty-state" id="editor-empty-state">
+                        <i class="fas fa-wand-magic-sparkles"></i>
+                        <p>Mulai dengan menambah elemen baru!</p>
+                    </div>
+                    </div>
+                <hr>
+                <label for="css-editor"><strong>Custom CSS:</strong></label>
+                <textarea id="css-editor" placeholder="body { font-family: sans-serif; }"></textarea>
+            </div>
+        </div>
+
+        <div class="panel is-active" id="panel-code">
+            <div class="panel-header">Kode</div>
+            <div class="panel-content" style="display: flex; flex-direction: column; gap: 10px; padding: 0;">
+                <div class="code-output">
+                    <button class="btn-copy" data-target="html-code-output" title="Salin Kode HTML"><i class="fas fa-copy"></i></button>
+                    <pre><code id="html-code-output"></code></pre>
+                </div>
+                <div class="code-output">
+                    <button class="btn-copy" data-target="css-code-output" title="Salin Kode CSS"><i class="fas fa-copy"></i></button>
+                    <pre><code id="css-code-output"></code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel is-active" id="panel-preview">
+            <div class="panel-header">Pratinjau Langsung</div>
+            <iframe id="live-preview-frame"></iframe>
+        </div>
+    </main>
+
+    <nav class="mobile-nav">
+        <button data-target="panel-editor" class="mobile-nav-btn active" title="Editor"><i class="fas fa-edit"></i></button>
+        <button data-target="panel-code" class="mobile-nav-btn" title="Kode"><i class="fas fa-code"></i></button>
+        <button data-target="panel-preview" class="mobile-nav-btn" title="Pratinjau"><i class="fas fa-eye"></i></button>
+    </nav>
+    
+    <script src="script.js"></script>
+</body>
+</html>
