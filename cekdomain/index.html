@@ -1,67 +1,129 @@
 <!doctype html>
-<html lang="id">
+
+<html lang=\"id\">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset=\"utf-8\" />
+  <meta name=\"viewport\" content=\"width=device-width,initial-scale=1\" />
   <title>Cek Domain Banyak - Fandirr</title>
   <style>
     :root{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;margin:0;padding:0}
     body{padding:24px;background:#f7f8fa;color:#111}
-    h1{font-size:20px;margin:0 0 12px}
-    .card{background:#fff;padding:16px;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.06);max-width:900px}
-    textarea{width:100%;min-height:120px;padding:10px;border:1px solid #ddd;border-radius:6px;resize:vertical}
-    .controls{display:flex;gap:8px;margin-top:8px}
-    button{padding:8px 12px;border-radius:6px;border:0;cursor:pointer}
+    .wrap{max-width:980px;margin:0 auto}
+    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+    h1{font-size:20px;margin:0}
+    .card{background:#fff;padding:16px;border-radius:10px;box-shadow:0 8px 30px rgba(14,20,30,.06)}
+    textarea{width:100%;min-height:140px;padding:12px;border:1px solid #e6e9ee;border-radius:8px;resize:vertical;font-size:14px}
+    .controls{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+    button{padding:8px 12px;border-radius:8px;border:0;cursor:pointer;font-weight:600}
     button.primary{background:#0b74de;color:#fff}
-    button.ghost{background:#eee}
-    table{width:100%;border-collapse:collapse;margin-top:12px}
-    th,td{padding:8px;border-bottom:1px solid #eee;text-align:left;font-size:13px}
-    th{background:#fafafa}
-    .small{font-size:12px;color:#666}
-    .status-true{color:green;font-weight:600}
-    .status-false{color:#c0392b;font-weight:600}
-    .progress{margin-top:8px;font-size:13px}
+    button.ghost{background:#f1f3f5;color:#111;border:1px solid #e6e9ee}
+    .small{font-size:13px;color:#666}
+    table{width:100%;border-collapse:collapse;margin-top:14px}
+    th,td{padding:10px;border-bottom:1px solid #f0f0f0;text-align:left;font-size:13px}
+    th{background:#fafafa;position:sticky;top:0}
+    .status-true{color:green;font-weight:700}
+    .status-false{color:#c0392b;font-weight:700}
+    .progress{margin-top:10px;font-size:13px}
+    .toolbar{display:flex;gap:8px;align-items:center;margin-top:8px;flex-wrap:wrap}
+    .pill{padding:6px 8px;border-radius:999px;background:#f4f6f8;border:1px solid #e6e9ee;font-size:13px}
+    label{font-size:13px;color:#444}
+    input[type=range]{width:160px}
+    .count{font-weight:700}
+    .actions{margin-left:auto}
+    .hidden{display:none}
+    .copy-btn{background:#fff;border:1px dashed #cbd5e1;padding:6px 10px;border-radius:8px;cursor:pointer}
+    pre{white-space:pre-wrap;font-size:12px}
   </style>
 </head>
 <body>
-  <div class="card">
-    <h1>Cek Domain Banyak</h1>
-    <p class="small">Masukkan lebih dari satu domain. Pisahkan dengan baris baru, koma, atau spasi. Contoh: <code>wa.web.id</code></p>
+  <div class=\"wrap\">
+    <header>
+      <h1>Cek Domain Banyak</h1>
+      <div class=\"small\">Fandirr Coding</div>
+    </header><div class=\"card\" role=\"main\">
+  <p class=\"small\">Masukkan lebih dari satu domain. Pisahkan dengan baris baru, koma, atau spasi. Contoh: <code>wa.web.id</code></p>
 
-    <textarea id="input" placeholder="Contoh:\nwa.web.id\nfandirr.web.id\nexample.com"></textarea>
+  <textarea id=\"input\" placeholder=\"Contoh:\nwa.web.id\nfandirr.web.id\nexample.com\"></textarea>
 
-    <div class="controls">
-      <button id="check" class="primary">Cek Domain</button>
-      <button id="clear" class="ghost">Kosongkan</button>
-      <button id="export" class="ghost">Export CSV</button>
+  <div class=\"toolbar\">
+    <div style=\"display:flex;gap:8px;align-items:center;\">
+      <label for=\"concurrency\">Concurrency</label>
+      <input id=\"concurrency\" type=\"range\" min=\"1\" max=\"20\" value=\"8\">
+      <span id=\"concurrencyVal\" class=\"pill\">8</span>
     </div>
 
-    <div id="progress" class="progress small" aria-live="polite"></div>
+    <div style=\"display:flex;gap:8px;align-items:center;\">
+      <label for=\"extFilter\">Filter ekstensi</label>
+      <input id=\"extFilter\" placeholder=\".web.id,.my.id,.biz.id\" class=\"pill\" style=\"border:none;padding:6px 10px;\">
+    </div>
 
-    <table id="results" aria-live="polite">
-      <thead>
-        <tr><th>Domain</th><th>Available</th><th>Message</th><th>Raw status</th></tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+    <div class=\"actions\">
+      <button id=\"check\" class=\"primary\">Cek Domain</button>
+      <button id=\"stop\" class=\"ghost\">Stop</button>
+      <button id=\"clear\" class=\"ghost\">Kosongkan</button>
+      <button id=\"export\" class=\"ghost\">Export CSV</button>
+      <button id=\"downloadJson\" class=\"ghost\">Download JSON</button>
+      <button id=\"copy\" class=\"ghost copy-btn\">Copy Results</button>
+    </div>
   </div>
 
-  <script>
-    const endpointBase = 'https://api.fandirr.my.id/search/domain?domain=';
+  <div id=\"progress\" class=\"progress small\" aria-live=\"polite\"></div>
 
+  <table id=\"results\" aria-live=\"polite\">
+    <thead>
+      <tr><th>Domain</th><th>Available</th><th>Message</th><th>Raw</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <div style=\"display:flex;gap:12px;margin-top:12px;align-items:center\">
+    <div class=\"pill\">Total: <span id=\"total\" class=\"count\">0</span></div>
+    <div class=\"pill\">Tersedia: <span id=\"availCount\" class=\"count\">0</span></div>
+    <div class=\"pill\">Terdaftar: <span id=\"takenCount\" class=\"count\">0</span></div>
+  </div>
+
+  <details style=\"margin-top:12px\">
+    <summary>Log (debug)</summary>
+    <pre id=\"log\" style=\"max-height:240px;overflow:auto\"></pre>
+  </details>
+
+</div>
+
+  </div>  <script>
+    const endpointBase = 'https://api.fandirr.my.id/search/domain?domain=';
     const $input = document.getElementById('input');
     const $check = document.getElementById('check');
+    const $stop = document.getElementById('stop');
     const $clear = document.getElementById('clear');
     const $export = document.getElementById('export');
+    const $downloadJson = document.getElementById('downloadJson');
+    const $copy = document.getElementById('copy');
     const $progress = document.getElementById('progress');
     const $tbody = document.querySelector('#results tbody');
+    const $concurrency = document.getElementById('concurrency');
+    const $concurrencyVal = document.getElementById('concurrencyVal');
+    const $extFilter = document.getElementById('extFilter');
+    const $total = document.getElementById('total');
+    const $availCount = document.getElementById('availCount');
+    const $takenCount = document.getElementById('takenCount');
+    const $log = document.getElementById('log');
+
+    let controller = null; // for aborting
+
+    $concurrency.addEventListener('input', () => $concurrencyVal.textContent = $concurrency.value);
 
     function parseDomains(raw) {
       if (!raw) return [];
-      // split by newline, comma, or whitespace, then trim and filter empties
       return raw.split(/[\n,\s]+/)
         .map(s => s.trim())
         .filter(Boolean);
+    }
+
+    function filterByExt(list, extStr) {
+      if (!extStr) return list;
+      const exts = extStr.split(',').map(s => s.trim()).filter(Boolean);
+      if (exts.length === 0) return list;
+      return list.filter(d => exts.some(e => d.endsWith(e)));
     }
 
     function addRow(domain, available, message, raw) {
@@ -75,79 +137,120 @@
       $tbody.appendChild(tr);
     }
 
-    function exportCSV() {
-      const rows = Array.from($tbody.querySelectorAll('tr')).map(tr =>
-        Array.from(tr.children).map(td => '"' + td.textContent.replace(/\"/g, '""') + '"').join(',')
-      );
-      if (rows.length === 0) {
-        alert('Tidak ada hasil untuk diekspor');
-        return;
-      }
-      const csv = ['"Domain","Available","Message","Raw"', ...rows].join('\n');
-      const blob = new Blob([csv], {type: 'text/csv'});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url; a.download = 'cek-domain-results.csv';
-      document.body.appendChild(a); a.click(); a.remove();
-      URL.revokeObjectURL(url);
+    function clearResults() {
+      $tbody.innerHTML = '';
+      $progress.textContent = '';
+      $total.textContent = 0;
+      $availCount.textContent = 0;
+      $takenCount.textContent = 0;
+      $log.textContent = '';
     }
 
-    // concurrency-limited runner
-    async function checkDomains(domains, concurrency = 5) {
-      $tbody.innerHTML = '';
-      let completed = 0;
-      $progress.textContent = `Menyiapkan ${domains.length} domain...`;
+    function exportCSV() {
+      const rows = Array.from($tbody.querySelectorAll('tr')).map(tr =>
+        Array.from(tr.children).map(td => '"' + td.textContent.replace(/\"/g, '\"\"') + '"').join(',')
+      );
+      if (rows.length === 0) { alert('Tidak ada hasil untuk diekspor'); return; }
+      const csv = ['"Domain","Available","Message","Raw"', ...rows].join('
+');
+      const blob = new Blob([csv], {type: 'text/csv'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = 'cek-domain-results.csv'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    }
 
+    function downloadJSON() {
+      const arr = Array.from($tbody.querySelectorAll('tr')).map(tr => {
+        const [d, av, msg, raw] = Array.from(tr.children).map(td => td.textContent);
+        return {domain: d, available: av === 'true' || av === 'Tersedia' || av === '1', message: msg, raw};
+      });
+      const blob = new Blob([JSON.stringify(arr, null, 2)], {type: 'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = 'cek-domain-results.json'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    }
+
+    function copyResults() {
+      const text = Array.from($tbody.querySelectorAll('tr')).map(tr =>
+        Array.from(tr.children).map(td => td.textContent).join('	')
+      ).join('
+');
+      navigator.clipboard.writeText(text).then(() => alert('Hasil disalin ke clipboard'))
+        .catch(()=> alert('Gagal menyalin'));
+    }
+
+    // concurrency-limited runner with retries and AbortController
+    async function checkDomains(domains, concurrency = 8) {
+      clearResults();
+      controller = new AbortController();
+      const signal = controller.signal;
+
+      let completed = 0, avail = 0, taken = 0;
       const queue = domains.slice();
-      const workers = Array.from({length: Math.min(concurrency, domains.length)}, () => worker());
 
-      async function worker() {
+      $progress.textContent = `Menyiapkan ${domains.length} domain...`;
+      $total.textContent = domains.length;
+
+      async function worker(id) {
         while (queue.length) {
+          if (signal.aborted) break;
           const domain = queue.shift();
-          $progress.textContent = `Memeriksa ${domain} (${completed}/${domains.length})`;
+          $progress.textContent = `Worker ${id}: memeriksa ${domain} (${completed}/${domains.length})`;
           try {
-            const res = await fetch(endpointBase + encodeURIComponent(domain));
-            if (!res.ok) throw new Error('HTTP ' + res.status);
-            const json = await res.json();
-            // expected structure provided by user
+            const json = await fetchWithRetry(endpointBase + encodeURIComponent(domain), {signal}, 2);
             addRow(json.domain || domain, json.available, json.message || '', JSON.stringify(json));
+            if (json.available) avail++; else taken++;
           } catch (err) {
-            addRow(domain, false, 'Gagal: ' + err.message, 'ERROR');
+            addRow(domain, false, 'Gagal: ' + (err.message||err), 'ERROR');
+            $log.textContent += `[${new Date().toISOString()}] ${domain} -> ${err.message || err}\n`;
+            taken++;
           }
           completed++;
+          $availCount.textContent = avail;
+          $takenCount.textContent = taken;
           $progress.textContent = `Selesai ${completed}/${domains.length}`;
         }
       }
 
+      const workers = Array.from({length: Math.min(concurrency, domains.length)}, (_,i) => worker(i+1));
       await Promise.all(workers);
+      controller = null;
       $progress.textContent = `Selesai. ${completed}/${domains.length} domain diperiksa.`;
     }
 
+    async function fetchWithRetry(url, opts = {}, retries = 2, backoff = 400) {
+      for (let i = 0; i <= retries; i++) {
+        try {
+          const res = await fetch(url, opts);
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          return await res.json();
+        } catch (e) {
+          if (i === retries) throw e;
+          await new Promise(r => setTimeout(r, backoff * (i+1)));
+        }
+      }
+    }
+
     $check.addEventListener('click', async () => {
-      const domains = parseDomains($input.value);
-      if (domains.length === 0) {
-        alert('Masukkan minimal 1 domain.');
-        return;
-      }
-      // jalankan pemeriksaan
-      try {
-        await checkDomains(domains, 8);
-      } catch (e) {
-        console.error(e);
-        alert('Terjadi kesalahan saat memeriksa. Cek console untuk detail.');
-      }
+      const extText = $extFilter.value.trim();
+      let domains = parseDomains($input.value || '');
+      domains = domains.map(d => d.replace(/^https?:\/\//, ''));
+      if (domains.length === 0) { alert('Masukkan minimal 1 domain.'); return; }
+      domains = filterByExt(domains, extText);
+      if (domains.length === 0) { alert('Tidak ada domain setelah filter ekstensi.'); return; }
+      const concurrency = parseInt($concurrency.value, 10) || 8;
+      try { await checkDomains(domains, concurrency); } catch (e) { console.error(e); alert('Terjadi kesalahan. Lihat log.'); }
     });
 
-    $clear.addEventListener('click', () => {
-      $input.value = '';
-      $tbody.innerHTML = '';
-      $progress.textContent = '';
+    $stop.addEventListener('click', () => {
+      if (controller) { controller.abort(); $progress.textContent = 'Dibatalkan.'; controller = null; }
     });
 
+    $clear.addEventListener('click', () => { $input.value = ''; clearResults(); });
     $export.addEventListener('click', exportCSV);
+    $downloadJson.addEventListener('click', downloadJSON);
+    $copy.addEventListener('click', copyResults);
 
-    // small convenience: sample domains on load
+    // helpful defaults
     $input.value = 'wa.web.id\nfandirr.web.id\nexample.com';
-  </script>
-</body>
+    $extFilter.value = '.web.id,.my.id,.biz.id';
+  </script></body>
 </html>
