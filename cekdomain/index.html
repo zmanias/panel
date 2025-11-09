@@ -35,55 +35,55 @@
   </style>
 </head>
 <body>
-  <div class=\"wrap\">
+  <div class="wrap">
     <header>
       <h1>Cek Domain Banyak</h1>
-      <div class=\"small\">Fandirr Coding</div>
-    </header><div class=\"card\" role=\"main\">
-  <p class=\"small\">Masukkan lebih dari satu domain. Pisahkan dengan baris baru, koma, atau spasi. Contoh: <code>wa.web.id</code></p>
+      <div class="small">Fandirr Coding</div>
+    </header><div class="card" role="main">
+  <p class="small">Masukkan lebih dari satu domain. Pisahkan dengan baris baru, koma, atau spasi. Contoh: <code>wa.web.id</code></p>
 
-  <textarea id=\"input\" placeholder=\"Contoh:\nwa.web.id\nfandirr.web.id\nexample.com\"></textarea>
+  <textarea id="input" placeholder="Contoh:\nwa.web.id\nfandirr.web.id\nexample.com"></textarea>
 
-  <div class=\"toolbar\">
-    <div style=\"display:flex;gap:8px;align-items:center;\">
-      <label for=\"concurrency\">Concurrency</label>
-      <input id=\"concurrency\" type=\"range\" min=\"1\" max=\"20\" value=\"8\">
-      <span id=\"concurrencyVal\" class=\"pill\">8</span>
+  <div class="toolbar">
+    <div style="display:flex;gap:8px;align-items:center;">
+      <label for="concurrency">Concurrency</label>
+      <input id="concurrency" type="range" min="1" max="20" value="8">
+      <span id="concurrencyVal" class="pill">8</span>
     </div>
 
-    <div style=\"display:flex;gap:8px;align-items:center;\">
-      <label for=\"extFilter\">Filter ekstensi</label>
-      <input id=\"extFilter\" placeholder=\".web.id,.my.id,.biz.id\" class=\"pill\" style=\"border:none;padding:6px 10px;\">
+    <div style="display:flex;gap:8px;align-items:center;">
+      <label for="extFilter">Filter ekstensi</label>
+      <input id="extFilter" placeholder=".web.id,.my.id,.biz.id" class="pill" style="border:none;padding:6px 10px;">
     </div>
 
-    <div class=\"actions\">
-      <button id=\"check\" class=\"primary\">Cek Domain</button>
-      <button id=\"stop\" class=\"ghost\">Stop</button>
-      <button id=\"clear\" class=\"ghost\">Kosongkan</button>
-      <button id=\"export\" class=\"ghost\">Export CSV</button>
-      <button id=\"downloadJson\" class=\"ghost\">Download JSON</button>
-      <button id=\"copy\" class=\"ghost copy-btn\">Copy Results</button>
+    <div class="actions">
+      <button id="check" class="primary">Cek Domain</button>
+      <button id="stop" class="ghost">Stop</button>
+      <button id="clear" class="ghost">Kosongkan</button>
+      <button id="export" class="ghost">Export CSV</button>
+      <button id="downloadJson" class="ghost">Download JSON</button>
+      <button id="copy" class="ghost copy-btn">Copy Results</button>
     </div>
   </div>
 
-  <div id=\"progress\" class=\"progress small\" aria-live=\"polite\"></div>
+  <div id="progress" class="progress small" aria-live="polite"></div>
 
-  <table id=\"results\" aria-live=\"polite\">
+  <table id="results" aria-live="polite">
     <thead>
       <tr><th>Domain</th><th>Available</th><th>Message</th><th>Raw</th></tr>
     </thead>
     <tbody></tbody>
   </table>
 
-  <div style=\"display:flex;gap:12px;margin-top:12px;align-items:center\">
-    <div class=\"pill\">Total: <span id=\"total\" class=\"count\">0</span></div>
-    <div class=\"pill\">Tersedia: <span id=\"availCount\" class=\"count\">0</span></div>
-    <div class=\"pill\">Terdaftar: <span id=\"takenCount\" class=\"count\">0</span></div>
+  <div style="display:flex;gap:12px;margin-top:12px;align-items:center">
+    <div class="pill">Total: <span id="total" class="count">0</span></div>
+    <div class="pill">Tersedia: <span id="availCount" class="count">0</span></div>
+    <div class="pill">Terdaftar: <span id="takenCount" class="count">0</span></div>
   </div>
 
-  <details style=\"margin-top:12px\">
+  <details style="margin-top:12px">
     <summary>Log (debug)</summary>
-    <pre id=\"log\" style=\"max-height:240px;overflow:auto\"></pre>
+    <pre id="log" style="max-height:240px;overflow:auto"></pre>
   </details>
 
 </div>
@@ -147,7 +147,7 @@
 
     function exportCSV() {
       const rows = Array.from($tbody.querySelectorAll('tr')).map(tr =>
-        Array.from(tr.children).map(td => '"' + td.textContent.replace(/\"/g, '\"\"') + '"').join(',')
+        Array.from(tr.children).map(td => '"' + td.textContent.replace(/"/g, '""') + '"').join(',')
       );
       if (rows.length === 0) { alert('Tidak ada hasil untuk diekspor'); return; }
       const csv = ['"Domain","Available","Message","Raw"', ...rows].join('
