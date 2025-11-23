@@ -48,5 +48,10 @@
     "domain": "zeus.web.id",
     "token": "Ha4d3fnrWRpkJHnPEcI2Xz983vnKWjVX3Zdwa1Ll",
     "zoneId": "1dcec9e7b43bf6df202111f39793eded"
+  },
+  {
+    "domain": "claudeotp.my.id",
+    "token": "Ha4d3fnrWRpkJHnPEcI2Xz983vnKWjVX3Zdwa1Ll",
+    "zoneId": "0e41235047d339affb50a41b568a9964"
   }
 ]
