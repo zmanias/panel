@@ -3,28 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Subdomain</title>
+    <title>Buat Subdomain</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="d-flex align-items-center min-vh-100 py-4">
+
     <div class="container">
-        <h1>Buat Subdomain Baru</h1>
-        <form id="createSubdomainForm">
-            <div class="form-group">
-                <label for="subdomainName">Nama Subdomain</label>
-                <input type="text" id="subdomainName" required>
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="card card-custom">
+                    <div class="card-header bg-white border-0 pt-4 pb-0 text-center">
+                        <h3 class="fw-bold">Buat Subdomain Baru</h3>
+                        <p class="text-muted small">Isi detail di bawah untuk deploy subdomain.</p>
+                    </div>
+                    <div class="card-body p-4">
+                        <form id="createSubdomainForm">
+                            <div class="mb-3">
+                                <label for="subdomainName" class="form-label fw-medium">Nama Subdomain</label>
+                                <input type="text" class="form-control" id="subdomainName" placeholder="contoh: app" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="domain" class="form-label fw-medium">Pilih Domain Utama</label>
+                                <select id="domain" class="form-select" required>
+                                    <option value="" selected disabled>Memuat domain...</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="ipAddress" class="form-label fw-medium">Alamat IP VPS</label>
+                                <input type="text" class="form-control font-monospace" id="ipAddress" value="127.0.0.1" required>
+                            </div>
+
+                            <button type="submit" id="createBtn" class="btn btn-primary w-100 py-2">
+                                <i class="bi bi-cloud-plus-fill me-2"></i> Buat Subdomain
+                            </button>
+                        </form>
+                        <div id="message" class="mt-3 text-center fw-bold"></div>
+                    </div>
+                </div>
+                <div class="text-center mt-3">
+                    <a href="index.html" class="text-decoration-none text-muted small">&larr; Kembali ke Login</a>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="domain">Pilih Domain Anda</label>
-                <select id="domain" required></select>
-            </div>
-            <div class="form-group">
-                <label for="ipAddress">Alamat IP VPS</label>
-                <input type="text" id="ipAddress" value="127.0.0.1" required>
-            </div>
-            <button type="submit" id="createBtn">Buat Subdomain</button>
-        </form>
-        <div id="message" class="message"></div>
+        </div>
     </div>
 
     <script src="script.js"></script>
