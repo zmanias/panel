@@ -63,5 +63,10 @@
     "domain": "azzcrow.my.id",
     "token": "n3HLHRwsRiZBhmB0_Ww3t1N0UEx9GJIPwNABkEqX",
     "zoneId": "79d1795702249911e17d0f9ca1d07b6f"
+  },
+  {
+    "domain": "devstudio.web.id",
+    "token": "Ha4d3fnrWRpkJHnPEcI2Xz983vnKWjVX3Zdwa1Ll",
+    "zoneId": "d195b1cabb963204293532d7a6547a9e"
   }
 ]
