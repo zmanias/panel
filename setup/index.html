@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VPS Config Generator - Fandirr Coding</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --input-bg: #334155;
+            --text: #f1f5f9;
+            --label: #94a3b8;
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --success: #10b981;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: var(--card);
+            padding: 2.5rem;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            border: 1px solid #334155;
+        }
+
+        h2 {
+            margin-top: 0;
+            text-align: center;
+            color: white;
+            margin-bottom: 2rem;
+            font-weight: 700;
+        }
+        
+        .badge {
+            background: rgba(59, 130, 246, 0.2);
+            color: var(--accent);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            vertical-align: middle;
+            margin-left: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            color: var(--label);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            background-color: var(--input-bg);
+            border: 2px solid transparent;
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            box-sizing: border-box; /* Fix padding issue */
+            transition: all 0.2s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--accent);
+            background-color: #0f172a;
+        }
+
+        .btn-generate {
+            width: 100%;
+            background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+            color: white;
+            border: none;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.1s, box-shadow 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-generate:hover {
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+            transform: translateY(-1px);
+        }
+
+        .btn-generate:active {
+            transform: translateY(1px);
+        }
+
+        .info-text {
+            text-align: center;
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-top: 1.5rem;
+            line-height: 1.5;
+        }
+
+        /* Toast Notification */
+        .toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: var(--success);
+            color: #fff;
+            text-align: center;
+            border-radius: 50px;
+            padding: 16px;
+            position: fixed;
+            z-index: 1;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
+        }
+
+        .toast.show {
+            visibility: visible;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+
+        @keyframes fadein {
+            from {bottom: 0; opacity: 0;}
+            to {bottom: 30px; opacity: 1;}
+        }
+
+        @keyframes fadeout {
+            from {bottom: 30px; opacity: 1;}
+            to {bottom: 0; opacity: 0;}
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Auto Deploy <span class="badge">V2.0</span></h2>
+
+        <div class="form-group">
+            <label for="domain">Nama Domain</label>
+            <input type="text" id="domain" placeholder="contoh: blackhat.web.id">
+        </div>
+
+        <div class="form-group">
+            <label for="port">Port Aplikasi (Localhost)</label>
+            <input type="number" id="port" placeholder="contoh: 4000">
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email (untuk SSL)</label>
+            <input type="email" id="email" placeholder="contoh: admin@gmail.com">
+        </div>
+
+        <button class="btn-generate" onclick="generateAndCopy()">
+            🚀 Generate & Copy Command
+        </button>
+
+        <p class="info-text">
+            Isi form di atas, klik tombol, lalu <b>Paste</b> di terminal VPS.<br>
+            Script otomatis mendeteksi Nginx/Certbot & melakukan setup.
+        </p>
+    </div>
+
+    <div id="toast" class="toast">✅ Command Disalin ke Clipboard!</div>
+
+    <script>
+        function generateAndCopy() {
+            // 1. Ambil nilai dari input HTML
+            const domain = document.getElementById('domain').value.trim();
+            const port = document.getElementById('port').value.trim();
+            const email = document.getElementById('email').value.trim();
+
+            // 2. Validasi sederhana
+            if (!domain || !port || !email) {
+                alert("Mohon isi semua kolom (Domain, Port, dan Email)!");
+                return;
+            }
+
+            // 3. Buat Template Script Bash
+            // Perhatikan penggunaan backslash (\) untuk escape karakter $ yang milik Bash, bukan JS.
+            const bashScript = `#!/bin/bash
+
+# --- KONFIGURASI DARI WEB ---
+DOMAIN="${domain}"
+APP_PORT="${port}"
+EMAIL="${email}"
+
+# Warna
+GREEN='\\033[0;32m'
+YELLOW='\\033[1;33m'
+NC='\\033[0m'
+
+echo -e "\${GREEN}>>> MEMULAI DEPLOYMENT OTOMATIS: \${DOMAIN} (Port: \${APP_PORT}) <<<\${NC}"
+
+# Fungsi Cek Package
+check_pkg() {
+    if dpkg -s \$1 >/dev/null 2>&1; then
+        echo -e "\${GREEN}[✓] \$1 sudah terinstall. Skip.\${NC}"
+    else
+        echo -e "\${YELLOW}[*] Menginstall \$1...\${NC}"
+        apt-get update -qq && apt-get install \$1 -y -qq
+    fi
+}
+
+# 1. Install Dependencies
+check_pkg "nginx"
+check_pkg "certbot"
+check_pkg "python3-certbot-nginx"
+
+# 2. Config Nginx
+CONF="/etc/nginx/sites-available/\$DOMAIN"
+echo -e "\${YELLOW}[*] Menulis konfigurasi Nginx...\${NC}"
+
+cat > \$CONF <<EOF
+server {
+    listen 80;
+    server_name \$DOMAIN www.\$DOMAIN;
+    location / {
+        proxy_pass http://localhost:\$APP_PORT;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade \\\$http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host \\\$host;
+        proxy_cache_bypass \\\$http_upgrade;
+        proxy_set_header X-Real-IP \\\$remote_addr;
+        proxy_set_header X-Forwarded-For \\\$proxy_add_x_forwarded_for;
+    }
+}
+EOF
+
+# Symlink & Restart
+rm -f /etc/nginx/sites-enabled/\$DOMAIN
+ln -s \$CONF /etc/nginx/sites-enabled/
+nginx -t && systemctl restart nginx
+
+# 3. SSL
+echo -e "\${YELLOW}[*] Requesting SSL...\${NC}"
+certbot --nginx --non-interactive --agree-tos --eff-email --redirect -m \$EMAIL -d \$DOMAIN -d www.\$DOMAIN
+
+echo -e "\${GREEN}[DONE] Website Live: https://\${DOMAIN}\${NC}"
+`;
+
+            // 4. Bungkus script agar bisa langsung dijalankan (One-Liner Magic)
+            const finalCommand = `cat << 'EOF_SETUP' > deploy.sh
+${bashScript}
+EOF_SETUP
+chmod +x deploy.sh
+./deploy.sh`;
+
+            // 5. Salin ke Clipboard
+            navigator.clipboard.writeText(finalCommand).then(() => {
+                showToast();
+            }).catch(err => {
+                alert('Gagal menyalin: ' + err);
+            });
+        }
+
+        function showToast() {
+            const x = document.getElementById("toast");
+            x.className = "toast show";
+            setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+        }
+    </script>
+</body>
+</html>
