@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Videy.co Downloader - Fandirr Coding</title>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --bg: #0f172a;
+            --card: #1e293b;
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: var(--card);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        h1 { margin-bottom: 0.5rem; font-size: 1.5rem; }
+        p.subtitle { color: var(--text-muted); margin-bottom: 2rem; font-size: 0.9rem; }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+        }
+
+        input {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #334155;
+            background: #020617;
+            color: white;
+            outline: none;
+        }
+
+        input:focus { border-color: var(--primary); }
+
+        button {
+            padding: 12px 20px;
+            border-radius: 8px;
+            border: none;
+            background-color: var(--primary);
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        button:hover { background-color: var(--primary-hover); }
+
+        .video-container {
+            margin-top: 1.5rem;
+            display: none; /* Sembunyikan default */
+            flex-direction: column;
+            gap: 10px;
+            background: #020617;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        video {
+            width: 100%;
+            border-radius: 4px;
+            max-height: 400px;
+        }
+
+        .download-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            text-decoration: none;
+            background-color: #22c55e;
+            color: white;
+            border-radius: 8px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .download-btn:hover { background-color: #16a34a; }
+
+        .error { color: #ef4444; font-size: 0.9rem; margin-top: 10px; display: none; }
+        
+        .footer { margin-top: 20px; font-size: 0.8rem; color: var(--text-muted); }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Videy Downloader</h1>
+        <p class="subtitle">Preview & Download (Based on Network Log Logic)</p>
+
+        <div class="input-group">
+            <input type="text" id="urlInput" placeholder="Tempel URL Videy di sini (contoh: https://videy.co/v?id=...)" />
+            <button onclick="processVideo()">Cek</button>
+        </div>
+
+        <p id="errorMsg" class="error">URL tidak valid atau ID tidak ditemukan.</p>
+
+        <div class="video-container" id="videoWrapper">
+            <video id="videoPlayer" controls playsinline></video>
+            <a id="downloadLink" class="download-btn" href="#" target="_blank" download>Download Video MP4</a>
+        </div>
+
+        <div class="footer">
+            By <strong>Fandirr Coding</strong> &bull; Educational Purpose Only
+        </div>
+    </div>
+
+    <script>
+        function processVideo() {
+            const input = document.getElementById('urlInput').value;
+            const errorMsg = document.getElementById('errorMsg');
+            const videoWrapper = document.getElementById('videoWrapper');
+            const videoPlayer = document.getElementById('videoPlayer');
+            const downloadLink = document.getElementById('downloadLink');
+
+            // Reset UI
+            errorMsg.style.display = 'none';
+            videoWrapper.style.display = 'none';
+            videoPlayer.pause();
+            videoPlayer.src = "";
+
+            // 1. Ekstraksi ID dari URL (Logika Regex)
+            // Pola: Mencari 'id=' diikuti oleh karakter alfanumerik
+            const idPattern = /id=([a-zA-Z0-9]+)/;
+            const match = input.match(idPattern);
+
+            if (match && match[1]) {
+                const videoId = match[1];
+                
+                // 2. Konstruksi URL CDN (Berdasarkan analisis HAR)
+                // Pola umum Videy adalah cdn.videy.co/{id}.mp4
+                const cdnUrl = `https://cdn.videy.co/${videoId}.mp4`;
+
+                // 3. Update Player dan Tombol Download
+                videoPlayer.src = cdnUrl;
+                downloadLink.href = cdnUrl;
+                
+                // Set nama file saat di-download
+                downloadLink.setAttribute('download', `videy_${videoId}.mp4`);
+
+                // Tampilkan container
+                videoWrapper.style.display = 'flex';
+                
+                // Auto-play (mute agar browser mengizinkan)
+                videoPlayer.muted = false;
+                videoPlayer.play().catch(e => console.log("Autoplay blocked, user must interact"));
+            } else {
+                errorMsg.style.display = 'block';
+                errorMsg.textContent = "Format URL salah. Pastikan ada parameter '?id='";
+            }
+        }
+    </script>
+
+</body>
+</html>
