@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BEM & BPH Perluasan - Landing Page</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root {
+            /* Palet Warna Hidup & Menonjol */
+            --primary-color: #4361ee;
+            --secondary-color: #3a0ca3;
+            --accent-color: #f72585;
+            --light-bg: #f8f9fa;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            background-color: #fff;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            padding: 15px 0;
+        }
+        .navbar-brand {
+            font-weight: 700;
+            color: var(--primary-color) !important;
+            font-size: 1.5rem;
+        }
+        .nav-link {
+            font-weight: 500;
+            color: #333 !important;
+            margin-left: 15px;
+            transition: color 0.3s;
+        }
+        .nav-link:hover {
+            color: var(--accent-color) !important;
+        }
+        .btn-custom {
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50px;
+            padding: 8px 25px;
+            transition: all 0.3s ease;
+        }
+        .btn-custom:hover {
+            background-color: var(--secondary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.4);
+        }
+
+        /* Hero Section - Gradient Vivid */
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 100px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+        .hero-shape {
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            line-height: 0;
+            transform: rotate(180deg);
+        }
+        .hero-shape svg {
+            position: relative;
+            display: block;
+            width: calc(100% + 1.3px);
+            height: 80px;
+        }
+        .hero-shape .shape-fill {
+            fill: #ffffff;
+        }
+
+        /* Section Styling */
+        .section-padding {
+            padding: 80px 0;
+        }
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        .section-title h2 {
+            font-weight: 700;
+            color: var(--secondary-color);
+            position: relative;
+            display: inline-block;
+        }
+        .section-title h2::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 4px;
+            background: var(--accent-color);
+            margin: 10px auto 0;
+            border-radius: 2px;
+        }
+
+        /* Card Styling (Portfolio & Info) */
+        .card-custom {
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            height: 100%;
+            background: white;
+        }
+        .card-custom:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+            background-color: #ddd; /* Placeholder color */
+        }
+        .card-body {
+            padding: 25px;
+        }
+        .card-title {
+            font-weight: 700;
+            color: var(--secondary-color);
+        }
+
+        /* BPH Section */
+        .bph-icon {
+            font-size: 3rem;
+            color: var(--accent-color);
+            margin-bottom: 20px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #1a1a1a;
+            color: white;
+            padding: 50px 0;
+        }
+        footer a {
+            color: #ccc;
+            text-decoration: none;
+        }
+        footer a:hover {
+            color: var(--accent-color);
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#"><i class="fas fa-university me-2"></i>BEM KAMPUS PLJ</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav align-items-center">
+                    <li class="nav-item"><a class="nav-link" href="#beranda">Beranda</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#tentang">Tentang</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#bph">BPH Perluasan</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#portfolio">Proker & Galeri</a></li>
+                    <li class="nav-item"><a href="#kontak" class="btn btn-custom ms-3">Hubungi Kami</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section id="beranda" class="hero-section d-flex align-items-center">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h1 class="hero-title mb-3">Bersinergi Untuk <span style="color: #4cc9f0;">Perubahan</span></h1>
+                    <p class="lead mb-4">Selamat datang di portal resmi Badan Eksekutif Mahasiswa. Wadah aspirasi, kreasi, dan inovasi mahasiswa.</p>
+                    <a href="#bph" class="btn btn-light btn-lg rounded-pill px-4 text-primary fw-bold shadow">Lihat Struktur</a>
+                </div>
+                <div class="col-lg-6 text-center d-none d-lg-block">
+                    <img src="logo.jpg" alt="Hero Image" class="img-fluid rounded-3 shadow-lg" style="opacity: 0.9;">
+                </div>
+            </div>
+        </div>
+        <div class="hero-shape">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="shape-fill"></path>
+            </svg>
+        </div>
+    </section>
+
+    <section id="tentang" class="section-padding">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6 mb-4 mb-md-0">
+                    <img src="logo.jpg" class="img-fluid rounded-4 shadow" alt="Tentang BEM">
+                </div>
+                <div class="col-md-6">
+                    <h2 class="fw-bold mb-3" style="color: var(--secondary-color);">Tentang Kabinet Ini</h2>
+                    <p class="text-muted">Badan Eksekutif Mahasiswa (BEM) periode ini membawa semangat <strong>"Progresif & Kolaboratif"</strong>. Kami berkomitmen untuk menjembatani aspirasi mahasiswa dengan pihak rektorat serta masyarakat luas.</p>
+                    <ul class="list-unstyled mt-3">
+                        <li class="mb-2"><i class="fas fa-check-circle text-primary me-2"></i> Advokasi Transparan</li>
+                        <li class="mb-2"><i class="fas fa-check-circle text-primary me-2"></i> Pengembangan Minat Bakat</li>
+                        <li class="mb-2"><i class="fas fa-check-circle text-primary me-2"></i> Pengabdian Masyarakat</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="bph" class="section-padding bg-light">
+        <div class="container">
+            <div class="section-title">
+                <h2>BPH Perluasan</h2>
+                <p class="text-muted mt-2">Struktur inti yang menggerakkan roda organisasi.</p>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-md-4 col-sm-6">
+                    <div class="card card-custom text-center p-4">
+                        <div class="bph-icon">
+                            <i class="fas fa-bullhorn"></i>
+                        </div>
+                        <h5 class="card-title">Kementerian Kominfo</h5>
+                        <p class="card-text text-muted small">Bertanggung jawab atas publikasi, branding, dan manajemen media sosial organisasi.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="card card-custom text-center p-4">
+                        <div class="bph-icon">
+                            <i class="fas fa-hand-holding-heart"></i>
+                        </div>
+                        <h5 class="card-title">Kementerian Sosmas</h5>
+                        <p class="card-text text-muted small">Fokus pada kegiatan sosial, desa binaan, dan respon bencana kemanusiaan.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="card card-custom text-center p-4">
+                        <div class="bph-icon">
+                            <i class="fas fa-users-cog"></i>
+                        </div>
+                        <h5 class="card-title">Kementerian PSDM</h5>
+                        <p class="card-text text-muted small">Pengembangan sumber daya mahasiswa melalui pelatihan dan kaderisasi.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="card card-custom text-center p-4">
+                        <div class="bph-icon">
+                            <i class="fas fa-coins"></i>
+                        </div>
+                        <h5 class="card-title">Kementerian Ekraf</h5>
+                        <p class="card-text text-muted small">Membangun kemandirian finansial organisasi melalui kewirausahaan kreatif.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="card card-custom text-center p-4">
+                        <div class="bph-icon">
+                            <i class="fas fa-scale-balanced"></i>
+                        </div>
+                        <h5 class="card-title">Kementerian Advokasi</h5>
+                        <p class="card-text text-muted small">Mengawal isu kampus dan memperjuangkan hak-hak mahasiswa.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="card card-custom text-center p-4">
+                        <div class="bph-icon">
+                            <i class="fas fa-globe-asia"></i>
+                        </div>
+                        <h5 class="card-title">Kementerian Luar Negeri</h5>
+                        <p class="card-text text-muted small">Menjalin relasi strategis dengan organisasi eksternal kampus.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="portfolio" class="section-padding">
+        <div class="container">
+            <div class="section-title">
+                <h2>Galeri Program Kerja</h2>
+                <p class="text-muted mt-2">Dokumentasi kegiatan dan pencapaian kami.</p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6">
+                    <div class="card card-custom">
+                        <img src="https://via.placeholder.com/400x300/f72585/ffffff?text=BEM+Festival" class="card-img-top" alt="Proker 1">
+                        <div class="card-body">
+                            <h5 class="card-title">BEM Festival 2024</h5>
+                            <p class="card-text text-muted">Ajang seni dan olahraga terbesar tahun ini yang melibatkan seluruh fakultas.</p>
+                            <a href="#" class="btn btn-sm btn-outline-primary rounded-pill">Lihat Detail</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="card card-custom">
+                        <img src="https://via.placeholder.com/400x300/4361ee/ffffff?text=Desa+Binaan" class="card-img-top" alt="Proker 2">
+                        <div class="card-body">
+                            <h5 class="card-title">Desa Binaan</h5>
+                            <p class="card-text text-muted">Pemberdayaan masyarakat desa melalui edukasi dan pembangunan infrastruktur.</p>
+                            <a href="#" class="btn btn-sm btn-outline-primary rounded-pill">Lihat Detail</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="card card-custom">
+                        <img src="https://via.placeholder.com/400x300/3a0ca3/ffffff?text=Seminar+Nasional" class="card-img-top" alt="Proker 3">
+                        <div class="card-body">
+                            <h5 class="card-title">Seminar Nasional</h5>
+                            <p class="card-text text-muted">Menghadirkan pembicara inspiratif untuk membahas isu terkini kebangsaan.</p>
+                            <a href="#" class="btn btn-sm btn-outline-primary rounded-pill">Lihat Detail</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer id="kontak">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h4 class="fw-bold text-white mb-3">BEM KAMPUS</h4>
+                    <p class="text-white-50">Mengabdi dengan Hati, Bergerak dengan Aksi.</p>
+                    <div class="d-flex gap-3">
+                        <a href="#"><i class="fab fa-instagram fa-lg"></i></a>
+                        <a href="#"><i class="fab fa-twitter fa-lg"></i></a>
+                        <a href="#"><i class="fab fa-youtube fa-lg"></i></a>
+                        <a href="#"><i class="fab fa-linkedin fa-lg"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5 class="text-white mb-3">Tautan Cepat</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#beranda">Beranda</a></li>
+                        <li class="mb-2"><a href="#tentang">Tentang Kami</a></li>
+                        <li class="mb-2"><a href="#portfolio">Program Kerja</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5 class="text-white mb-3">Kontak</h5>
+                    <p class="text-white-50 mb-1"><i class="fas fa-map-marker-alt me-2"></i> Gedung PKM Lt. 2, Kampus Pusat</p>
+                    <p class="text-white-50 mb-1"><i class="fas fa-envelope me-2"></i> bem@kampus.ac.id</p>
+                    <p class="text-white-50"><i class="fas fa-phone me-2"></i> +62 812 3456 7890</p>
+                </div>
+            </div>
+            <hr class="border-secondary mt-4">
+            <div class="text-center text-white-50">
+                <small>&copy; 2024 Badan Eksekutif Mahasiswa. All Rights Reserved.</small>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
