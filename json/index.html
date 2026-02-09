@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Extractor Dashboard - Fandirr Coding</title>
+    <style>
+        :root {
+            --primary: #6366f1; /* Indigo */
+            --primary-hover: #4f46e5;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #334155;
+            --border: #e2e8f0;
+            --success: #10b981;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* --- Header Section --- */
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        p.subtitle {
+            color: #64748b;
+            margin-top: 0;
+        }
+
+        /* --- Control Panel (Input & Import) --- */
+        .control-panel {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            margin-bottom: 40px;
+            border: 1px solid var(--border);
+        }
+
+        .file-upload-wrapper {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: #f1f5f9;
+            border-radius: 8px;
+            border: 2px dashed #cbd5e1;
+        }
+
+        input[type="file"] {
+            font-size: 14px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 120px;
+            padding: 15px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-family: 'Consolas', monospace;
+            font-size: 13px;
+            box-sizing: border-box;
+            resize: vertical;
+            transition: 0.3s;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            flex: 2;
+        }
+        .btn-primary:hover { background-color: var(--primary-hover); transform: translateY(-1px); }
+
+        .btn-secondary {
+            background-color: #e2e8f0;
+            color: #475569;
+            flex: 1;
+        }
+        .btn-secondary:hover { background-color: #cbd5e1; }
+
+        /* --- Grid Layout Result --- */
+        #resultGrid {
+            display: grid;
+            /* INI BAGIAN GRID MAGIC NYA */
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        /* --- Card Styling --- */
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+            height: 100%; /* Biar tinggi kartu sama rata */
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            border-color: #c7d2fe;
+        }
+
+        .card-header {
+            background: #f8fafc;
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cmd-badge {
+            background: #e0e7ff;
+            color: #4338ca;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .btn-copy-icon {
+            background: none;
+            border: 1px solid var(--border);
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            color: #64748b;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .btn-copy-icon:hover { background: #fff; border-color: var(--primary); color: var(--primary); }
+        .btn-copy-icon.copied { background: var(--success); color: white; border-color: var(--success); }
+
+        .card-body {
+            padding: 15px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text-main);
+            /* Mempertahankan format enter (\n) */
+            white-space: pre-wrap; 
+            flex-grow: 1; /* Isi kartu akan mengisi ruang kosong */
+        }
+
+        .empty-state {
+            grid-column: 1 / -1; /* Mengambil lebar penuh grid */
+            text-align: center;
+            padding: 50px;
+            color: #94a3b8;
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Fandirr Response Dashboard</h1>
+            <p class="subtitle">Upload JSON File atau Paste Teks &rarr; Generate Grid &rarr; Salin</p>
+        </header>
+        
+        <div class="control-panel">
+            <div class="file-upload-wrapper">
+                <span style="font-weight:bold; color:#475569;">📁 Import JSON File:</span>
+                <input type="file" id="fileInput" accept=".json" onchange="handleFileUpload(this)">
+            </div>
+
+            <textarea id="jsonInput" placeholder='Atau paste kode JSON mentah di sini...'></textarea>
+            
+            <div class="btn-group">
+                <button class="btn-primary" onclick="generateGrid()">🚀 GENERATE GRID</button>
+                <button class="btn-secondary" onclick="resetForm()">🗑️ Reset</button>
+            </div>
+        </div>
+
+        <div id="resultGrid">
+            <div class="empty-state">
+                <p>Belum ada data yang dimuat.</p>
+                <small>Upload file .json atau paste teks di atas.</small>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. Fungsi Handle File Upload ---
+        function handleFileUpload(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            
+            // Saat file selesai dibaca
+            reader.onload = function(e) {
+                const content = e.target.result;
+                // Masukkan isi file ke textarea agar user bisa lihat
+                document.getElementById('jsonInput').value = content;
+                // Otomatis generate
+                generateGrid();
+            };
+
+            // Mulai baca file sebagai teks
+            reader.readAsText(file);
+        }
+
+        // --- 2. Fungsi Utama Generate ---
+        function generateGrid() {
+            const inputRaw = document.getElementById('jsonInput').value;
+            const gridArea = document.getElementById('resultGrid');
+            
+            // Bersihkan area
+            gridArea.innerHTML = '';
+
+            if (!inputRaw.trim()) {
+                gridArea.innerHTML = '<div class="empty-state">Data kosong. Silakan input JSON.</div>';
+                return;
+            }
+
+            try {
+                const data = JSON.parse(inputRaw);
+
+                if (!Array.isArray(data)) {
+                    alert("Error: Format JSON harus berupa Array [...]");
+                    return;
+                }
+
+                let cardCount = 0;
+
+                data.forEach((item) => {
+                    if (item.respon) {
+                        createGridCard(item.cmd || 'Unknown', item.respon, gridArea);
+                        cardCount++;
+                    }
+                });
+
+                if (cardCount === 0) {
+                    gridArea.innerHTML = '<div class="empty-state">JSON valid, tapi tidak ada field "respon" ditemukan.</div>';
+                }
+
+            } catch (error) {
+                alert("JSON Error: Format file tidak valid!");
+                console.error(error);
+            }
+        }
+
+        // --- 3. Fungsi Membuat Kartu Grid ---
+        function createGridCard(cmd, content, container) {
+            const card = document.createElement('div');
+            card.className = 'card';
+
+            // Header Kartu
+            const header = document.createElement('div');
+            header.className = 'card-header';
+            
+            const badge = document.createElement('span');
+            badge.className = 'cmd-badge';
+            badge.textContent = cmd;
+
+            const btnCopy = document.createElement('button');
+            btnCopy.className = 'btn-copy-icon';
+            btnCopy.innerHTML = '📋 Copy';
+            
+            // Aksi Copy
+            btnCopy.onclick = () => {
+                navigator.clipboard.writeText(content).then(() => {
+                    btnCopy.innerHTML = '✅ Oke';
+                    btnCopy.classList.add('copied');
+                    setTimeout(() => {
+                        btnCopy.innerHTML = '📋 Copy';
+                        btnCopy.classList.remove('copied');
+                    }, 1500);
+                });
+            };
+
+            header.appendChild(badge);
+            header.appendChild(btnCopy);
+
+            // Body Kartu
+            const body = document.createElement('div');
+            body.className = 'card-body';
+            body.textContent = content; // Aman dari XSS, tapi tetap render \n karena CSS pre-wrap
+
+            card.appendChild(header);
+            card.appendChild(body);
+            container.appendChild(card);
+        }
+
+        function resetForm() {
+            document.getElementById('jsonInput').value = '';
+            document.getElementById('fileInput').value = ''; // Reset input file
+            document.getElementById('resultGrid').innerHTML = '<div class="empty-state">Data direset. Siap input baru.</div>';
+        }
+    </script>
+</body>
+</html>
